@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <link href="../static/css/bootstrap.min.css" th:href="@{/static/css/bootstrap.min.css}" rel="stylesheet">
+    <script src="../static/js/wangEditor.min.js" th:src="@{/static/js/wangEditor.min.js}"></script>
+    <script src="../static/js/jquery-3.2.1.min.js" th:src="@{/static/js/jquery-3.2.1.min.js}"></script>
+    <script src="../static/js/bootstrap.min.js" th:src="@{/static/js/bootstrap.min.js}"></script>
+    <title>Write Box</title>
+    <style>
+        #username{
+            float: right;
+            margin-right: 20px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<!--<header>
+    <p id="username" th:text="${username}"></p>
+</header>-->
+
+
+<!--<input type="text" id="write_title" placeholder="Title"/><br>
+<textarea id="write_textarea" cols="110" rows="50"></textarea><br>
+<input type="button" value="保存" onclick="write_save()"/>
+<div id="div"></div>
+<a href="/toHome">返回主页</a>-->
+
+<input type="text" id="write_title" class="form-control" placeholder="Title input"/><br>
+<!--<textarea class="form-control" id="write_textarea" rows="40" cols="80"></textarea><br>-->
+
+<div id="editor"></div>
+
+<script type="text/javascript">
+    var author;
+    $(function () {
+        author = $("#username").text();
+    });
+    var E = window.wangEditor
+    var editor = new E('#editor')
+    editor.create()
+    function saveForWrite() {
+        var title = document.getElementById("write_title").value;
+        var main = editor.txt.html();
+        if(title == ""){
+            alert("请输入标题");
+            return;
+        }
+        if(main == ""){
+            alert("请输入内容");
+            return;
+        }
+        $.ajax({
+            type: "post",
+            url: "write_save",
+            data: {user:author,title:title,main:main},
+            success: function (data) {
+                $("#span").html(data);
+            }
+        });
+    }
+</script>
+
+<input class="btn btn-default" type="button" value="Save" onclick="saveForWrite()"/>  <span id="span"></span>
+<a class="btn btn-default" href="/toHome" role="button">Home</a>
+
+<footer>
+    <p id="username" th:text="${username}"></p>
+</footer>
+
+</body>
+</html>

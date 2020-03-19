@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <link href="../static/css/bootstrap.min.css" th:href="@{/static/css/bootstrap.min.css}" rel="stylesheet">
+    <script src="../static/js/jquery-3.2.1.min.js" th:src="@{/static/js/jquery-3.2.1.min.js}"></script>
+    <script src="../static/js/bootstrap.min.js" th:src="@{/static/js/bootstrap.min.js}"></script>
+    <script src="../static/js/wangEditor.min.js" th:src="@{/static/js/wangEditor.min.js}"></script>
+    <title>Read Box</title>
+    <script>
+        $(function () {
+            isLiked();
+        })
+    </script>
+
+</head>
+<body>
+<!--<p th:text="${title}"></p><br>
+<textarea readonly="readonly" th:text="${main}" cols="110" rows="50"></textarea><br>
+<a href="/toHome">返回主页</a>-->
+
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title" th:text="${title}">_</h3>
+        <div th:text="${id}" id="mid" hidden="hidden"></div>
+        <div th:text="${username}" id="u_name" hidden="hidden"></div>
+    </div>
+    <div class="panel-body">
+<textarea class="form-control" id="area1" th:text="${main}" style="display:none"></textarea>
+        <div id="editor"></div>
+        <script type="text/javascript">
+
+            var main = $("#area1").val();
+            var E = window.wangEditor
+            var editor = new E('#editor')
+            // 或者 var editor = new E( document.getElementById('editor') )
+            editor.create()
+            editor.$textElem.attr('contenteditable', false)
+            editor.txt.html(main)
+
+            function like() {
+                if($("#isLiked").html()==="您已赞过"){
+                    alert("已经赞过啦!");
+                }else{
+                    $.ajax({
+                        type: "post",
+                        url: "like",
+                        data:{user_name:$("#u_name").html(),article_id:$("#mid").html()},
+                        success: function (data) {
+                            alert(data);
+                            $("#isLiked").html("您已赞过");
+                        }
+                    });
+                }
+            }
+
+            function isLiked() {
+                $.ajax({
+                    type: "post",
+                    url: "isLiked",
+                    data:{user_name:$("#u_name").html(),article_id:$("#mid").html()},
+                    success: function (data) {
+                        if(data === "ok"){
+                            // alert("您已赞过")
+                            $("#isLiked").html("您已赞过");
+                        }
+                    }
+                });
+            }
+        </script>
+    </div>
+</div>
+<br>
+<a href="/toHome" class="btn btn-success">Home</a>
+<a class="btn btn-default" id="svo-like" href="#" onmousedown="like()" >👍</a>
+<span id="isLiked"></span>
+
+</body>
+</html>

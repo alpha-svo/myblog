@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <link href="../static/css/bootstrap.min.css" th:href="@{/static/css/bootstrap.min.css}" rel="stylesheet">
+    <script src="../static/js/jquery-3.2.1.min.js" th:src="@{/static/js/jquery-3.2.1.min.js}"></script>
+    <script src="../static/js/bootstrap.min.js" th:src="@{/static/js/bootstrap.min.js}"></script>
+    <script src="../static/js/wangEditor.min.js" th:src="@{/static/js/wangEditor.min.js}"></script>
+    <title>Edit Box</title>
+    <style>
+        #id{
+            float: right;
+            margin-right: 20px;
+        }
+    </style>
+</head>
+<body>
+
+
+<!--<p id="id" th:text="${id}"></p>
+<input id="input" type="text" th:value="${title}"><br>
+<textarea id="textarea" cols="110" rows="50" th:text="${edit_main}"></textarea><br>
+
+<input type="button" onclick="save()" value="保存"/>
+<div id="save_div"></div><br>
+<input type="button" onclick="del()" value="删除"/>
+<div id="delete_div"></div><br>
+<a href="#" onclick="send()">返回我的账户</a>-->
+
+
+<input type="text" id="title" class="form-control" th:value="${title}"/><br>
+<textarea id="area1" th:text="${edit_main}" style="display: none" ></textarea><br>
+
+<div id="editor"></div>
+
+<script type="text/javascript">
+    var E = window.wangEditor
+    var editor = new E('#editor')
+    editor.create()
+    editor.txt.html($("#area1").val())
+
+    var id;
+    $(function () {
+       id = $("#id").html();
+    });
+
+    function send2() {
+            $.ajax({
+                type: "post",
+                url: "get_session_user",
+                data: {},
+                success: function (data) {
+                    window.location.href = "/my_articles?"+data;
+                }
+        });
+    }
+
+    function save2() {
+        var main = editor.txt.html();
+        var title = $("#title").val();
+        if(title == ""){
+            alert("请输入标题")
+            return;
+        }
+        if(main == ""){
+            alert("请输入内容")
+            return;
+        }
+        $.ajax({
+            type: "post",
+            url: "after_edit_save",
+            data: {main:main,title:title,id:id},
+            success: function (data,status) {
+                $("#save_div").html(data);
+            }
+        });
+    }
+
+    function del2() {
+        $.ajax({
+            type: "post",
+            url: "edit_delete",
+            data: {id:id},
+            success: function (data) {
+                $("#delete_div").html(data);
+            }
+        });
+    }
+</script>
+
+<div class="btn-group" role="group" aria-label="...">
+    <button type="button" class="btn btn-default" onclick="save2()">Save</button>
+    <button type="button" class="btn btn-default" onclick="del2()">Delete</button>
+    <button type="button" class="btn btn-default" onclick="send2()">Home</button>
+</div>
+<span id="save_div"></span>
+<span id="delete_div"></span>
+
+<footer>
+    <p id="id" th:text="${id}"></p>
+</footer>
+
+</body>
+</html>

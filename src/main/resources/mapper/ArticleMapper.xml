@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="my.blog.myblog.mapper.ArticleMapper">
+
+
+    <select id="getAll" resultType="article">
+        select * from article
+    </select>
+
+    <select id="findByTitle" resultType="article">
+        select * from article where title like CONCAT('%',#{title},'%')
+    </select>
+
+    <insert id="insertOne" parameterType="article">
+        insert into article (title,main,date,author) values(#{title},#{main},#{date},#{author})
+    </insert>
+
+    <update id="updateOne" parameterType="article">
+        update article set title=#{title},main=#{main},date=#{date} where id=#{id}
+    </update>
+
+    <delete id="deleteOne" parameterType="int">
+        delete from article where id = #{id}
+    </delete>
+
+    <select id="getMainById" resultType="string">
+        SELECT main FROM article WHERE id=#{id}
+    </select>
+
+    <select id="getAllByAuthor" resultType="article">
+       SELECT * FROM article WHERE author=#{author}
+    </select>
+
+    <update id="updatePoke" parameterType="int">
+        update article set poke = poke + 1 where id = #{id}
+    </update>
+
+
+    <select id="getOneById" resultType="article">
+       SELECT * FROM article WHERE id=#{id}
+    </select>
+
+    <update id="updatePoke_p" parameterType="int">
+        update article set poke = poke - 1 where id = #{id}
+    </update>
+
+    <select id="getTotal" resultType="int">
+        select count(id) from article
+    </select>
+
+</mapper>

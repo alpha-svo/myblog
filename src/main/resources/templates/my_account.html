@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <link href="../static/css/bootstrap.min.css" th:href="@{/static/css/bootstrap.min.css}" rel="stylesheet">
+    <script src="../static/js/jquery-3.2.1.min.js" th:src="@{/static/js/jquery-3.2.1.min.js}"></script>
+    <script src="../static/js/bootstrap.min.js" th:src="@{/static/js/bootstrap.min.js}"></script>
+    <title>My Account</title>
+
+    <style>
+        #pageButton{
+            margin: 0 auto;
+            text-align: center;
+        }
+    </style>
+
+    <script>
+        function search_my() {
+            window.location.href = "/search?title="+$("#search_title").val();
+        }
+    </script>
+</head>
+<body>
+
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/toHome">😂</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">📑<span class="sr-only">(current)</span></a></li>
+                <li><a href="#" th:href="@{'/toWrite?user='+${my_username}}">📃</a></li>
+                <li><a href="#" th:href="@{'/myPoke?u_name='+${my_username}}">👍</a></li>
+            </ul>
+            <form class="navbar-form navbar-left" role="search">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="search_title" placeholder="Search"/>
+                </div>
+                <input type="button" value="🔎" class="btn btn-default" onclick="search_my()"/>
+            </form>
+            <ul class="nav navbar-nav navbar-right">
+<!--                <li><a href="#" th:text="${my_username}">_</a></li>-->
+                <li class="dropdown">
+                    <a href="#" th:text="${my_username}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">_<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/toHome">Home</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="/logout">登出</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+
+<table class="table table-hover">
+    <tr>
+        <td>ID</td>
+        <td>Title</td>
+        <td>Date</td>
+        <td>Pokes</td>
+        <td>Edit Box</td>
+    </tr>
+    <tr th:each="article:${page.list}">
+        <td th:text="${article.id}"></td>
+        <td th:text="${article.title}"></td>
+        <td th:text="${article.date}"></td>
+        <td th:text="${article.poke}"></td>
+        <td><a class="btn btn-warning" th:href="@{'/to_article_edit?id='+${article.id}+'&title='+${article.title}}">Edit</a></td>
+    </tr>
+</table>
+<br>
+<div id="pageButton">
+    <a class="btn btn-default" th:href="@{'/my_articles?username='+${session.session_user.getUsername()}+'&start=0'}">🏡</a>
+    <a class="btn btn-default" th:href="@{'/my_articles?username='+${session.session_user.getUsername()}+'&start='+${page.getPageNum()-1}}">⏪</a>
+    <a class="btn btn-default" th:href="@{'/my_articles?username='+${session.session_user.getUsername()}+'&start='+${page.getPageNum()+1}}">⏩</a>
+    <a class="btn btn-default" th:href="@{'/my_articles?username='+${session.session_user.getUsername()}+'&start='+${page.pages}}">🚩</a>
+</div>
+</body>
+</html>

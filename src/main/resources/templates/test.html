@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../static/js/jquery-3.2.1.min.js" th:src="@{/static/js/jquery-3.2.1.min.js}"></script>
+    <script>
+        $(function () {
+            $("#test_btn").click(function () {
+                $("#test_div").hide();
+            });
+        });
+
+    </script>
+    <script>
+        window.onload=function () {
+            /*var hahaha = document.getElementById("hahaha").value;
+            alert(hahaha)
+            var p = document.getElementById("p").innerHTML;
+            alert(p)*/
+            alert(document.getElementById("textarea").value)
+            alert(document.getElementById("pp").innerHTML)
+        };
+        function fun() {
+            var xmlhttp;
+            if (window.XMLHttpRequest)
+            {// code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp=new XMLHttpRequest();
+            }
+            else
+            {// code for IE6, IE5
+                xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            //---------------------------------------
+            xmlhttp.open("post","test2",true);
+            xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+            xmlhttp.send("main=hello");
+            //---------------------------------------
+            xmlhttp.onreadystatechange=function()
+            {
+                if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                {
+                    var responseText = xmlhttp.responseText;
+                    document.getElementById("p").innerHTML=responseText;
+                }
+            }
+        }
+
+        function ajax2() {
+            var xmlhttp;
+            if (window.XMLHttpRequest)
+            {// code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp=new XMLHttpRequest();
+            }
+            else
+            {// code for IE6, IE5
+                xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            //---------------------------------------
+            xmlhttp.open("get","test2",true);
+            xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+            xmlhttp.send("main=hello");
+            //---------------------------------------
+            xmlhttp.onreadystatechange=function()
+            {
+                if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                {
+                    var responseText = xmlhttp.responseText;
+
+                }
+            }
+        }
+
+        function run2() {
+
+            window.location.href="/test2"
+        }
+
+        function ajax3() {
+            var i = document.getElementById("textarea").value;
+            //创建对象
+            var xmlhttp;
+            if (window.XMLHttpRequest)
+            {// code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp=new XMLHttpRequest();
+            }
+            else
+            {// code for IE6, IE5
+                xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            //发送请求
+            xmlhttp.open("post","test3",true);
+            xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+            xmlhttp.send("main="+i);
+            //相应数据
+            xmlhttp.onreadystatechange=function()
+            {
+                if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                {
+                    document.getElementById("p").innerHTML = xmlhttp.responseText;
+                }
+            }
+        }
+
+        function jqajax(){
+            $.ajax({
+                type: "post",
+                url: "/test2",
+                data: {first:"hello",second:"world"},
+                success: function (data,status) {
+                    if(status == "success"){
+                        alert(data+"---"+status);
+                    }
+                }
+            });
+        }
+
+    </script>
+</head>
+<body>
+
+<input type="submit" onclick="fun()"/>
+
+
+<input type="text" value="hahaha" id="hahaha"/><br>
+
+<div id="p"></div>
+
+<input type="button" onclick="run2()"/>
+
+
+<input type="submit" value="ajax3" onclick="ajax3()"/>
+
+
+<textarea name="main" th:text="${text}" id="textarea"></textarea>
+<input type="submit" value="提交ajax3"/>
+
+<p id="pp" th:text="ppppp"></p>
+<hr>
+<hr>
+<hr>
+<input type="button" value="hahahahahaha" onclick="jqajax()">
+<div id="jqdiv"></div>
+
+
+<div id="test_div">
+    <table>
+        <tr><td>1</td><td>2</td></tr>
+    </table>
+</div>
+
+<button id="test_btn">点击我</button>
+
+
+<textarea id="main"></textarea>
+<button id="btn222">click222</button>
+<script>
+
+    $("#btn222").click(function () {
+        $("#main").val("hahaahhaahah");
+    });
+
+</script>
+</body>
+</html>
